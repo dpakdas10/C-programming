@@ -1,0 +1,405 @@
+#include<stdio.h>
+#include<stdlib.h>
+
+struct linked_list
+{
+    int data;
+    struct linked_list *next;
+};
+typedef struct linked_list node;
+node *head=NULL, *temp=NULL;
+
+void create()
+{
+    node *ptr;
+    int item;
+    ptr = (node *)malloc(sizeof(node));
+    if(ptr==NULL)
+    {
+        printf("\nOVERFLOW: Unable to allocate memory.\n");
+        exit(0);
+    }
+    printf("\nEnter the data to store.\n");
+    scanf("%d",&item);
+    ptr->data=item;
+    ptr->next=NULL;
+    if(head==NULL)
+    {
+        head=ptr;
+        temp=head;
+    }
+    else{
+        temp->next=ptr;
+        temp=temp->next;
+    }
+    printf("\nNode Inserted.");
+}
+
+void display()
+{
+    node *ptr;
+    if(head == NULL)  
+    {  
+        printf("\nList is empty.\n"); 
+    }
+    else
+    {
+            ptr=head;
+            printf("\nThe List are: \n");
+            if(ptr->next==NULL)
+        {
+            printf("%d--->",ptr->data);
+            return;
+        }
+            while(ptr!=NULL)
+            {
+                printf("%d--->",ptr->data);
+                if(ptr->next->next==NULL)
+            {
+                printf("%d--->",ptr->next->data);
+                return;
+            }
+            ptr=ptr->next;
+            }
+    }
+}
+
+void insert_at_begin()
+{
+    node *ptr;
+    int item;
+    ptr=(node *)malloc(sizeof(node));
+    if(ptr==NULL)
+    {
+        printf("\nUnable to allocate memory");
+        return;
+    }
+    else
+    {
+        printf("\nEnter the item: ");
+        scanf("%d",&item);
+        ptr->data=item;
+        if(head==NULL)
+        {
+            ptr->next=NULL;
+            head=ptr;
+            temp=head;
+        }
+        else{
+            ptr->next=head;
+            head=ptr;
+        }
+        printf("\nNode inserted successfully.");
+    }
+
+}
+
+void insert_at_end()
+{
+    node *ptr, *temp1;
+    int item;
+    ptr=(node *)malloc(sizeof(node));
+    if(ptr==NULL)
+    {
+        printf("\nUnable to allocate memory\n");
+    }
+    else
+    {
+        printf("\nEnter the item: ");
+        scanf("%d",&item);
+        ptr->data=item;
+        ptr->next=NULL;
+        if(head==NULL)
+        {
+            head=ptr;
+            temp=head;
+        }
+        else{
+            temp1=head;
+            while(temp1->next!=NULL)
+                temp1=temp1->next;
+                temp1->next=ptr;
+                ptr->next=NULL;
+                temp=ptr;
+                printf("\nitem inserted succefully\n");
+        }
+    }
+}
+
+void insert_at_middle()
+{
+    node *ptr,*temp1;
+    int loc,item;
+    ptr=(node *)malloc(sizeof(node));
+    if(ptr==NULL)
+    {
+        printf("\nUnable to allocate memory\n");
+    }
+    else{
+        printf("\nEnter the item: ");
+        scanf("%d",&item);
+        printf("Enter the location: ");
+        scanf("%d",&loc);
+        ptr->data=item;
+        temp1=head;
+        for(int i=1;i<loc&&temp1!=NULL;i++)
+        {
+            temp1=temp1->next;
+            if(temp1==NULL)
+            break;
+        }
+        if(temp1!=NULL)
+        {
+            ptr->next=temp1->next;
+            temp1->next=ptr;
+            printf("\nNode inserted succefully\n");
+        }
+        else
+        {
+            printf("\nUnable to enter data at given position\n");
+        }
+    }
+}
+
+void delete_from_begin()
+{
+    node *ptr;
+    if(head==NULL)
+    {
+        printf("\nList is already empty.\n");
+    }
+    else
+    {
+        ptr=head;
+        head=ptr->next;
+        free(ptr);
+        printf("\nSuccessfully deleted from begining\n");
+    }
+}
+
+void delete_from_end()
+{
+    node *todelete,*secondlast;
+    if(head==NULL)
+    {
+        printf("\nList is empty\n");
+    }
+    else{
+        todelete=head;
+        secondlast=head;
+        while(todelete->next!=NULL)
+        {
+            secondlast=todelete;
+            todelete=todelete->next;
+        }
+        if(todelete==head)
+        {
+            head=NULL;
+            temp=head;
+        }
+        else
+        {
+            secondlast->next=NULL;
+            temp=secondlast;
+        }
+        free(todelete);
+        printf("\nSuccessfully deleted at last\n");
+    }
+}
+
+void delete_at_middle()
+{
+    node *todelete,*prevnode;
+    int loc;
+    if(head==NULL)
+    {
+        printf("\nList is empty\n");
+    }
+    else{
+        for(int i=0;i<loc;i++)
+        {
+            prevnode=todelete;
+            todelete=todelete->next;
+            if(todelete==NULL)
+            break;
+        }
+        if(todelete!=NULL)
+        {
+           if(todelete==head)
+            head=head->next;
+            else
+            prevnode->next=todelete->next;
+            todelete->next=NULL;
+            free(todelete);
+            printf("\nNode successfully deleted from the location\n");
+        }
+        else{
+            printf("\nInvalid Position\n");
+        }
+    }
+}
+
+void delete_list()
+{
+    node *ptr;
+    while(ptr!=NULL)
+    {
+        ptr=head;
+        head=head->next;
+        free(ptr);
+    }
+    printf("\nSuccessfully deleted all nodes\n");
+}
+
+void countnodes()
+{
+    int count=0;
+    node *ptr;
+    ptr=head;
+    while(ptr!=NULL)
+    {
+        count++;
+        ptr=ptr->next;
+    }
+    printf("\nThe Total Number of nodes is %d",count);
+}
+
+void search()
+{
+    node *ptr;
+    int key;
+    ptr=head;
+    printf("Enter the key element: ");
+    scanf("%d",&key);
+    while(ptr!=NULL && ptr->data!=key);
+        ptr=ptr->next;
+    if(ptr!=NULL)
+    printf("The element is present in the list");
+    else
+    printf("The lement is not present in the list");
+}
+
+void sort()
+{
+    node *current=head, *index=NULL;
+    int temp1;
+    if(head==NULL)
+    {
+        printf("\nList is empty");
+    }
+    else{
+        while(current!=NULL)
+        {
+            index=current->next;
+            while(index!=NULL)
+            {
+                if(current->data>index->data)
+                {
+                    temp1=current->data;
+                    current->data=index->data;
+                    index->data=temp1;
+                }
+                index=index->next;
+            }
+            current=current->next;
+        }
+        printf("\nLIST IS SORTED\n");
+    }
+}
+
+void reverse()
+{
+    node *curr,*prev;
+    if(head==NULL)
+    {
+        printf("\nThe list is empty\n");
+    }
+    else{
+        prev=head;
+        curr=head->next;
+        head=head->next;
+        prev->next=NULL;
+        while(head!=NULL)
+        {
+            head=head->next;
+            curr->next=prev;
+            prev=curr;
+            curr=head;
+        }
+        head=prev;
+        printf("\nSuccessfully reversed");
+    }
+}
+
+int main()
+{
+    system ("cls");
+    int choices;
+    while(1)
+    {
+        printf("\n                MENU                             \n");
+        printf("1. Create \n");
+        printf("2. Display\n");
+        printf("3. Insert item at begining\n");
+        printf("4. Insert item at end\n");
+        printf("5. Insert item at the location\n"); 
+        printf("6. Delete At begining\n");
+        printf("7. Delete at end\n");
+        printf("8. Delete at location\n");
+        printf("9. Delete all nodes\n");
+        printf("10. Count the nodes\n");
+        printf("11. Search the data\n");
+        printf("12. Sort the data\n");
+        printf("13. Reverse the data\n");
+        printf("\n------------------------------------------------------\n");
+        printf("Enter your choices to perform task: ");
+        scanf("%d",&choices);
+        switch(choices)
+        {
+            case 1 :
+                create();
+                break;
+            case 2 :
+                display();
+                break;
+            case 3 :
+                insert_at_begin();
+                break;
+            case 4 :
+                insert_at_end();
+                break;
+            case 5 :
+                insert_at_middle();
+                break;
+            case 6 :
+                delete_from_begin();
+                break;
+            case 7 :
+                delete_from_end();
+                break;
+            case 8 :
+                delete_at_middle();
+                break;
+            case 9 :
+                delete_list();
+                break;
+            case 10 :
+                countnodes();
+                break;
+            case 11 :
+                search();
+                break;
+            case 12 :
+                sort();
+                break;
+            case 13 :
+                reverse();
+                break;
+            default:
+                printf("\nWrong Choice:\n");
+                break;
+        }
+    }
+    
+    return 0;
+}
